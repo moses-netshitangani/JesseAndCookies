@@ -1,13 +1,23 @@
 class Result {
     public static int cookies(int k, List<Integer> A) {
         // edge case: all items already >= k
-        // edge case: all items = (0,0)
+        // edge case: sequence of 0s
 
         // sort list in asc order
         // check if first item <= k, else return
         // pop first two items and apply formula
         // append result, and increment count
-
+        // Now consider using a DS that auto sorts on insertion and deletion
+        int count = 0;
+        while (true) {
+            A.sort(null);
+            int firstCookie = A.remove(0);
+            if (firstCookie >= k) return count;
+            int secondCookie = A.remove(1);
+            int result = firstCookie + (2 * secondCookie);
+            A.add(result);
+            count++;
+        }
     }
 }
 
