@@ -14,6 +14,7 @@ class Result {
             int firstCookie = A.remove(0);
             if (firstCookie >= k) return count;
             int secondCookie = A.remove(1);
+            if (firstCookie == secondCookie && firstCookie < k) return -1;
             int result = firstCookie + (2 * secondCookie);
             A.add(result);
             count++;
