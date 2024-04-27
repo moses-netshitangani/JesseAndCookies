@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.TreeSet;
+
 class Result {
     public static int cookies(int k, List<Integer> A) {
         // edge case: all items already >= k
@@ -8,17 +11,37 @@ class Result {
         // pop first two items and apply formula
         // append result, and increment count
         // Now consider using a DS that auto sorts on insertion and deletion
+
+        // if set is empty while list isn't, add to set.
+        // if set only has one item, and the item < k return -1
+        // sort the set, and remove the first two items from both
+        // apply formula, and add the result to both
+        // increment
+
         int count = 0;
-        while (true) {
-            A.sort(null);
-            int firstCookie = A.remove(0);
-            if (firstCookie >= k) return count;
-            int secondCookie = A.remove(1);
-            if (firstCookie == secondCookie && firstCookie < k) return -1;
-            int result = firstCookie + (2 * secondCookie);
-            A.add(result);
+        TreeSet<Integer> set = new TreeSet<>();
+
+        while (!A.isEmpty()) {
+            if (set.isEmpty()) set.addAll(A);
+
+            if (set.first() >= k) break;
+
+            if (set.size() == 1 && set.first() < k) return -1;
+
+            int leastSweetCookie = set.pollFirst();
+            int secondLeastSweetCookie = set.pollFirst();
+            A.remove(Integer.valueOf(leastSweetCookie));
+            A.remove(Integer.valueOf(secondLeastSweetCookie));
+
+            int newCookie = leastSweetCookie + (2 * secondLeastSweetCookie);
+
+            A.add(newCookie);
+            set.add(newCookie);
+
             count++;
         }
+
+        return count;
     }
 }
 
