@@ -1,5 +1,12 @@
+package src.main.java;
+
+import java.io.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 class Result {
     public static int cookies(int k, List<Integer> A) {
@@ -19,24 +26,24 @@ class Result {
         // increment
 
         int count = 0;
-        TreeSet<Integer> set = new TreeSet<>();
+        A.sort(Collections.reverseOrder());
 
         while (!A.isEmpty()) {
-            if (set.isEmpty()) set.addAll(A);
+            if (A.get(A.size() - 1) >= k) break;
 
-            if (set.first() >= k) break;
+            if (A.size() == 1 && A.get(0) < k) return -1;
 
-            if (set.size() == 1 && set.first() < k) return -1;
-
-            int leastSweetCookie = set.pollFirst();
-            int secondLeastSweetCookie = set.pollFirst();
-            A.remove(Integer.valueOf(leastSweetCookie));
-            A.remove(Integer.valueOf(secondLeastSweetCookie));
+            int leastSweetCookie = A.remove(A.size() - 1);
+            int secondLeastSweetCookie = A.remove(A.size() - 1);
 
             int newCookie = leastSweetCookie + (2 * secondLeastSweetCookie);
 
-            A.add(newCookie);
-            set.add(newCookie);
+            if (A.isEmpty() || newCookie >= A.get(0)) {
+                A.add(0, newCookie);
+            } else {
+                A.add(newCookie);
+                A.sort(Collections.reverseOrder());
+            }
 
             count++;
         }
