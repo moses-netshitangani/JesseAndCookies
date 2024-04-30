@@ -11,8 +11,8 @@ class Result {
         // edge case: all items already >= k
         // edge case: sequence of 0s
 
-        // sort list in asc order
-        // check if first item <= k, else return
+        // sort list in desc order
+        // check if last item <= k, else return
         // pop first two items and apply formula
         // append result, and increment count
         // Now consider using a DS that auto sorts on insertion and deletion - TreeMap
@@ -26,20 +26,21 @@ class Result {
         // consider storing new values in a new list instead of resorting the old one every time
         // do a check to see if the minimum exists in that list too
         // while loop should check that both lists not empty
+        // this new list, is a queue :)
 
         int count = 0;
-        List<Integer> B = new ArrayList<>();
+        Queue<Integer> B = new LinkedList<>();
+
         A.sort(Collections.reverseOrder());
 
         while (!A.isEmpty() || !B.isEmpty()) {
-            int listSize = A.size();
-            if (A.get(listSize - 1) >= k) break;
+            int leastSweetCookie = getMinimum(A, B);
 
-            if (A.size() == 1 && A.get(0) < k) return -1;
+            if (leastSweetCookie >= k) break;
 
-            int leastSweetCookie = A.remove(listSize - 1);
-            int secondLeastSweetCookie = A.remove(listSize - 2);
+            if (A.size() + B.size() == 1 && leastSweetCookie < k) return -1;
 
+            int secondLeastSweetCookie = getMinimum(A, B);
             int newCookie = leastSweetCookie + (2 * secondLeastSweetCookie);
 
             B.add(newCookie);
@@ -48,6 +49,23 @@ class Result {
         }
 
         return count;
+    }
+
+    private static int getMinimum(List<Integer> A, Queue<Integer> B) {
+        int listASize = A.size();
+        int listBSize = B.size();
+        int min = 0;
+        if (listASize > 0) {
+            if(listBSize > 0) {
+                int minA = A.get(listASize - 1);
+                int minB = B.peek();
+                if (minA <= minB) min = A.remove(listASize - 1); else min = B.remove();
+            } else {
+                min = A.remove(listASize - 1);
+            }
+        } else min = B.remove();
+
+        return min;
     }
 }
 
