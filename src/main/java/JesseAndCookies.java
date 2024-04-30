@@ -1,9 +1,7 @@
 package src.main.java;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -17,7 +15,7 @@ class Result {
         // check if first item <= k, else return
         // pop first two items and apply formula
         // append result, and increment count
-        // Now consider using a DS that auto sorts on insertion and deletion
+        // Now consider using a DS that auto sorts on insertion and deletion - TreeMap
 
         // if set is empty while list isn't, add to set.
         // if set only has one item, and the item < k return -1
@@ -25,25 +23,26 @@ class Result {
         // apply formula, and add the result to both
         // increment
 
+        // consider storing new values in a new list instead of resorting the old one every time
+        // do a check to see if the minimum exists in that list too
+        // while loop should check that both lists not empty
+
         int count = 0;
+        List<Integer> B = new ArrayList<>();
         A.sort(Collections.reverseOrder());
 
-        while (!A.isEmpty()) {
-            if (A.get(A.size() - 1) >= k) break;
+        while (!A.isEmpty() || !B.isEmpty()) {
+            int listSize = A.size();
+            if (A.get(listSize - 1) >= k) break;
 
             if (A.size() == 1 && A.get(0) < k) return -1;
 
-            int leastSweetCookie = A.remove(A.size() - 1);
-            int secondLeastSweetCookie = A.remove(A.size() - 1);
+            int leastSweetCookie = A.remove(listSize - 1);
+            int secondLeastSweetCookie = A.remove(listSize - 2);
 
             int newCookie = leastSweetCookie + (2 * secondLeastSweetCookie);
 
-            if (A.isEmpty() || newCookie >= A.get(0)) {
-                A.add(0, newCookie);
-            } else {
-                A.add(newCookie);
-                A.sort(Collections.reverseOrder());
-            }
+            B.add(newCookie);
 
             count++;
         }
