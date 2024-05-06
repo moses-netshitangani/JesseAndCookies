@@ -16,19 +16,19 @@ class Result {
         // this separate list, is a queue :)
 
         int count = 0;
-        Queue<Long> B = new LinkedList<>();
+        Queue<Integer> B = new LinkedList<>();
 
         A.sort(Collections.reverseOrder());
 
         while (!A.isEmpty() || !B.isEmpty()) {
-            long leastSweetCookie = getMinimum(A, B);
+            int leastSweetCookie = getMinimum(A, B);
 
             if (leastSweetCookie >= k) break;
 
             if (A.size() + B.size() == 0 && leastSweetCookie < k) return -1;
 
-            long secondLeastSweetCookie = getMinimum(A, B);
-            long newCookie = leastSweetCookie + (2 * secondLeastSweetCookie);
+            int secondLeastSweetCookie = getMinimum(A, B);
+            int newCookie = leastSweetCookie + (2 * secondLeastSweetCookie);
             B.add(newCookie);
             count++;
         }
@@ -36,10 +36,10 @@ class Result {
         return count;
     }
 
-    private static long getMinimum(List<Integer> A, Queue<Long> B) {
+    private static int getMinimum(List<Integer> A, Queue<Integer> B) {
         int listASize = A.size();
         int listBSize = B.size();
-        long min = 0;
+        int min = 0;
         if (listASize > 0) {
             if(listBSize > 0) {
                 int minA = A.get(listASize - 1);
